@@ -1,5 +1,6 @@
 //  
 // Flight Simulator
+// Modified From
 // Alex Beach 
 //
 #include <windows.h>
@@ -12,14 +13,14 @@
 
 using namespace std;
 
-#define GRASSDIM 256        //square dimenstion of the two textures
+#define landDIM 256        //square dimenstion of the two textures
 #define RUNWAYDIM 512
-#define grass "grass2.ppm"  //file names for the two textures
+#define land "land.ppm"  //file names for the two textures
 #define runway "runway.ppm"
 #define rotationRate 0.04
 
-GLuint grassTexture;        //texture object for the grass
-GLuint roadTexture;         //texture object for the grass
+GLuint landTexture;        //texture object for the land
+GLuint roadTexture;         //texture object for the land
 int nFPS = 60;		        //Frame rate for animation
 							//The how much the angle is updated 
 
@@ -78,8 +79,8 @@ void loadTextureFile(const char * filename)
 	}
 	else
 	{		
-		w = GRASSDIM;
-		h = GRASSDIM;
+		w = landDIM;
+		h = landDIM;
 	}	 
 	//byte data for the pixel values
 	//each pixel is reresnted as 3 bytes, one for R,g, and b
@@ -101,14 +102,14 @@ void loadTextureFile(const char * filename)
 
 }
 //Creates Glunit objects that store the texture information
-//There is on for each type of texture, i.e. one for grass, the other
+//There is on for each type of texture, i.e. one for land, the other
 //for the road texture
 void bindTextures( const char * filename1, const char * filename2)
 {
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); //sets the format of the pixel data
-	glGenTextures(1, &grassTexture); //binds texure
-	glBindTexture(GL_TEXTURE_2D, grassTexture); //binds texture
+	glGenTextures(1, &landTexture); //binds texure
+	glBindTexture(GL_TEXTURE_2D, landTexture); //binds texture
 	loadTextureFile(filename1);//loads file
 	glGenTextures(1, &roadTexture); //binds texture
 	glBindTexture(GL_TEXTURE_2D, roadTexture); //loads file
@@ -123,7 +124,7 @@ void init(void)
 	glClearColor(0.53,0.81,0.98,1.0);		// clear color is gray
 	glEnable (GL_DEPTH_TEST);				//specifies what is written to the depth buffer 
 	glShadeModel(GL_SMOOTH);				//sets shading model, which is how colors are iterpolated across polygons
-	bindTextures(grass, runway);			//opens the texture files
+	bindTextures(land, runway);			//opens the texture files
 	printf("Init. complete\n");
 }
 
@@ -163,11 +164,11 @@ void displayTerrain()
 	glColor3f(1.0,1.0,1.0);
 	glPolygonMode(GL_BACK, GL_FILL);	
 	glEnable (GL_TEXTURE_2D); // enable texture mapping 
-	glBindTexture (GL_TEXTURE_2D, grassTexture); //bind grass texture
+	glBindTexture (GL_TEXTURE_2D, landTexture); //bind land texture
 	glPushMatrix ();
 	glRotatef(300,0.f,1.f,0.f);  //roates the terain
 	glBegin( GL_QUADS );   //being drawing verticies for quadrolaterals
-	glTexCoord2d(0.0,0.0); glVertex3d(-terrainSize,1.0,-terrainSize);   //draws the polygon for the grasss
+	glTexCoord2d(0.0,0.0); glVertex3d(-terrainSize,1.0,-terrainSize);   //draws the polygon for the lands
 	glTexCoord2d(textureSize,0.0);   glVertex3d(terrainSize,1.0,-terrainSize);	  //sets the texel coordinates 
 	glTexCoord2d(textureSize,textureSize); glVertex3d(terrainSize,1.0,terrainSize);
 	glTexCoord2d(0.0,textureSize); glVertex3d(-terrainSize,1.0,terrainSize);
